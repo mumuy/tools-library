@@ -18,20 +18,21 @@ function ajax(params){
 		type: params.type||'json',
 		data: params.data||{}
 	};	
-	var json2string = function(json) {
+	var formatParams = function(json) {
         var arr = [];
         for(var i in json) {
             arr.push(encodeURIComponent(i) + '=' + encodeURIComponent(json[i]));    
         }
         return arr.join("&");
     };
-	options.data = json2string(options.data);
-	xhr.open(options.method, options.url, options.async);
-	if (options.method == 'GET') {
-		xhr.send(null);
-	}else{
+	options.data = formatParams(options.data);
+	if (options.method == 'POST') {
+		xhr.open(options.method, options.url, options.async);
 		xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
 		xhr.send(options.data);
+	}else{
+		xhr.open(options.method, options.url + '?'+ options.data, options.async);
+		xhr.send(null);
 	}
 	var requestDone = false;
 	setTimeout(function() {
@@ -42,7 +43,7 @@ function ajax(params){
 	}, options.timeout);
 	xhr.onreadystatechange = function(){
 		if(xhr.readyState == 4&&!requestDone) {
-			if(xhr.status == 200) {
+			if(xhr.status>=200 && xhr.status<300) {
 				var data = options.type == "xml" ? xhr.responseXML : xhr.responseText;
 				if (options.type == "json") {
 					try{
