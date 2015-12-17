@@ -17,7 +17,7 @@ function ajax(params){
 	var json2string = function(json) {
         var arr = [];
         for(var i in json) {
-            arr.push(i + '=' + json[i]);    
+            arr.push(encodeURIComponent(i) + '=' + encodeURIComponent(json[i]));    
         }
         return arr.join("&");
     };
