@@ -31,16 +31,19 @@ function ajax(params){
         window[options.jsonpCallback] = function (json) {
             $head.removeChild($script);
             window[options.jsonpCallback] = null;
+            hander && clearTimeout(hander);
             options.success(json);
+            options.complete();
         };
         //发送请求
         options.data[options.jsonp] = options.jsonpCallback;
         $script.src = options.url + '?' + formatParams(options.data);
         //超时处理
-        setTimeout(function(){
+        var hander = setTimeout(function(){
             $head.removeChild($script);
             window[options.jsonpCallback] = null;
             options.error();
+            options.complete();
         }, options.timeout);
 	}else{
 		//创建xhr对象
