@@ -1,8 +1,12 @@
 function ajax(params){
-    var xhr = new (self.XMLHttpRequest||ActiveXObject)("Microsoft.XMLHTTP");  //最简实现xhr
+    var xhr = new (self.XMLHttpRequest||ActiveXObject)("Microsoft.XMLHTTP"); //最简实现xhr
 	if(!xhr){
 		return false;
 	}
+	params = params||{};
+	if (!params.url || !params.callback) {
+        throw new Error('Necessary parameters are missing'); //必要参数未填
+    }
 	var options = {
 		url: params.url||'',
 		method: (params.method||'GET').toUpperCase(),
