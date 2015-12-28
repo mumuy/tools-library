@@ -1,6 +1,6 @@
 function ajax(params){
 	params = params||{};
-	if (!params.url || !params.callback) {
+	if (!params.url) {
         throw new Error('Necessary parameters are missing.'); //必要参数未填
     }
 	var options = {
