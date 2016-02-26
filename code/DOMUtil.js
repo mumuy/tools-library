@@ -26,11 +26,15 @@ var DOMUtil = {
 		return {'left':l,'top':t,'width':w,'height':h} ;
 	},
     getNextElement:function(node){	//获取下一个节点
-        var NextElementNode = node.nextSibling;
-        while(NextElementNode.nodeValue != null){
-            NextElementNode = NextElementNode.nextSibling
-        }
-        return NextElementNode;
+    	if(node.nextElementSibling){
+    		return node.nextElementSibling;
+    	}else{
+	        var NextElementNode = node.nextSibling;
+	        while(NextElementNode.nodeValue != null){
+	            NextElementNode = NextElementNode.nextSibling
+	        }
+	        return NextElementNode;    		
+    	}
 	},
 	getElementById:function(idName){
 	    return document.getElementById(idName);
