@@ -1,6 +1,6 @@
 //跨浏览器事件对象
 var EventUtil = { 
-	addHandler:function(element,type,handler){ //添加绑定
+	addEvent:function(element,type,handler){ //添加绑定
 		if(element.addEventListener){ 
 			element.addEventListneter(type,handler,false); 
 		}else if(element.attachEvent){ 
@@ -9,7 +9,7 @@ var EventUtil = {
 			element['on'+type]=handler; 
 		} 
 	}, 
-	removeHandler:function(element,type,handler){ //删除绑定 
+	removeEvent:function(element,type,handler){ //删除绑定 
 		if(element.removeEventListener){ 
 			element.removeEventListneter(type,handler,false); 
 		}else if(element.detachEvent){ 
