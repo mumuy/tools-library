@@ -2,7 +2,7 @@
 var EventUtil = { 
 	addEvent:function(element,type,handler){ //添加绑定
 		if(element.addEventListener){ 
-			element.addEventListneter(type,handler,false); 
+			element.addEventListener(type,handler,false); 
 		}else if(element.attachEvent){ 
 			element.attachEvent('on'+type,handler); 
 		}else{ 
