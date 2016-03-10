@@ -28,6 +28,14 @@ var Tool = {
 		date.setTime(date.getTime() - 10000);
 		document.cookie = name + "=a; expires=" + date.toGMTString();
 	},
+	extend:function (target, source) {
+	    for (var p in source) {
+	        if (source.hasOwnProperty(p)) {
+	            target[p] = source[p];
+	        }
+	    }  
+	    return target;
+	},
 	date:function(fmt,timestamp){
 		// 对Date的扩展，将 Date 转化为指定格式的String 
 		// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
