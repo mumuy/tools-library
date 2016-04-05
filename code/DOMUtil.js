@@ -64,8 +64,11 @@ var DOMUtil = {
 	    }
 	    return results;
 	},
+	hasClass:function(node,classname){
+		return node.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)')); 
+	},
 	addClass:function(node,classname){ 			//对节点增加class
-		if(!new RegExp("(^|\s+)"+classname).test(node.className)){
+		if(!this.hasClass(node,classname)){
 	   		node.className = (node.className+" "+classname).replace(/^\s+|\s+$/g,'');
 	  	}
 	},
