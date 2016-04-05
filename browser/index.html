@@ -3,43 +3,18 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>浏览器测试</title>
-		<script src="../code/browser.js"></script>
+		<script src="../code/Browser.js"></script>
 	</head>
 	<body>
 		<script>
 				document.writeln("appVersion："+navigator.appVersion+"<br/>");
-				document.writeln("userAgent："+navigator.userAgent+"<br/>");
-
-				document.writeln("语言："+browser.language+"<br/>");
-				document.writeln("<h2>内核</h2>");
-				document.writeln("是否为IE内核："+browser.isTrident+"<br/>");
-				document.writeln("是否为opera内核："+browser.isPresto+"<br/>");
-				document.writeln("是否为Webkit内核："+browser.isWebKit+"<br/>");
-				document.writeln("是否为火狐内核："+browser.isGecko+"<br/>");
-				document.writeln("<h2>浏览器</h2>");
-				document.writeln("是否为IE浏览器："+browser.isIE+"<br/>");
-				document.writeln("是否为Chrome浏览器："+browser.isChrome+"<br/>");
-				document.writeln("是否为Firefox浏览器："+browser.isFirefox+"<br/>");
-				document.writeln("是否为Opera浏览器："+browser.isOpera+"<br/>");
-				document.writeln("是否为UC浏览器："+browser.isUC+"<br/>");
-				document.writeln("是否为QQ浏览器："+browser.isQQ+"<br/>");
-				document.writeln("是否为百度浏览器："+browser.isBaiDu+"<br/>");
-				document.writeln("是否为搜狗浏览器："+browser.isSouGou+"<br/>");
-				document.writeln("是否为Safari："+browser.isSafari+"<br/>");
-				document.writeln("<h2>操作系统</h2>");
-				document.writeln("是否为android："+browser.isAndroid+"<br/>");
-				document.writeln("是否为wp："+browser.isWP+"<br/>");
-				document.writeln("是否为BlackBerry："+browser.isBlackBerry+"<br/>");
-				document.writeln("是否为MeeGo："+browser.isMeeGo+"<br/>");
-				document.writeln("是否为Symbian："+browser.isSymbian+"<br/>");
-				document.writeln("是否为Windows："+browser.isWindows+"<br/>");
-				document.writeln("是否为Mac："+browser.isMac+"<br/>");
-				document.writeln("是否为iOS："+browser.isIOS+"<br/>");
-				document.writeln("是否为iphone："+browser.isIPhone+"<br/>");
-				document.writeln("是否为ipad："+browser.isIPad+"<br/>");
-				document.writeln("<h2>设备</h2>");
-				document.writeln("是否为手机："+browser.isMobile+"<br/>");
-				document.writeln("是否为平板："+browser.isTablet+"<br/>");
+				document.writeln("userAgent："+navigator.userAgent+"<br/><br/>");
+				var info = new Browser();
+				document.writeln("浏览器："+info.browser+"<br/>");
+				document.writeln("内核："+info.engine+"<br/>");
+				document.writeln("操作系统："+info.os+"<br/>");
+				document.writeln("设备："+info.device+"<br/>");
+				document.writeln("语言："+info.language+"<br/>");
 		</script>
 	</body>
 </html>
