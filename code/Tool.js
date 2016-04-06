@@ -62,5 +62,28 @@ var Tool = {
 	    	}
 		}
 		return fmt; 
+	},
+	imageDownload:function(resources, callback) {	//图片加载完成后执行
+	    var num = len,len = resources.length;
+	    var list = [];
+	    for(var i=0;i<len;i++){
+	    	(function(url){
+	    		var $item = new Image();
+	    		$item.src = url;
+	    		list.push($item);
+		        var doSomething = function(){
+		            num--;
+		            if (!num) {
+		                callback(list);
+		            }
+		            $item.onload = null;
+		        };
+		        if ($item.complete && $item.width) {
+		            doSomething();
+		        } else {
+		            $item.onload = doSomething;
+		        }
+	    	})(resources[i]);
+	    }
 	}
 }
