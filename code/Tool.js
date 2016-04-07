@@ -63,6 +63,10 @@ var Tool = {
 		}
 		return fmt; 
 	},
+	in_array:function(val,arr){						//元素是否在数组中
+		for(i=0;i<arr.length&&arr[i]!=val;i++);
+			return!(i==arr.length);
+	},
 	imageDownload:function(resources, callback) {	//图片加载完成后执行
 	    var num = len,len = resources.length;
 	    var list = [];
