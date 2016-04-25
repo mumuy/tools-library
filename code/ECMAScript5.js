@@ -21,6 +21,12 @@ if(!String.prototype.trim) {
 	};
 }
 
+//日期
+if (!Date.now) {
+	Date.now = function now() {
+    	return new Date().getTime();
+	};
+}
 
 //数组
 if(!Array.isArray) {
