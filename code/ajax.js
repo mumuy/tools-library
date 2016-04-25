@@ -4,17 +4,18 @@ function ajax(params){
         throw new Error('Necessary parameters are missing.'); //必要参数未填
     }
 	var options = {
-		url: params.url||'',
-		type: (params.type||'GET').toUpperCase(),
-		timeout: params.timeout||5000,
-		async : true,
-		complete: params.complete||function(){},
-		error: params.error||function() {},
-		success: params.success||function(){},
-		dataType: params.dataType||'json',
-		data: params.data||{},
+		url: params.url||'',	//接口地址
+		type: (params.type||'GET').toUpperCase(),	//请求方式
+		timeout: params.timeout||5000,	//超时等待时间
+		async : true,	//是否异步
+		xhrFields:{},	//设置XHR对象属性键值对。如果需要，可设置withCredentials为true的跨域请求。
+		dataType: params.dataType||'json',	//请求的数据类型
+		data: params.data||{},	//参数
 		jsonp:'callback',
-		jsonpCallback:('jsonp_' + Math.random()).replace('.','')
+		jsonpCallback:('jsonp_' + Math.random()).replace('.',''),
+		error: params.error||function() {},
+		success: params.success||function(){},		
+		complete: params.complete||function(){}
 	};	
 	var formatParams = function(json) {
         var arr = [];
@@ -56,11 +57,17 @@ function ajax(params){
 		if (options.type == 'POST') {
 			xhr.open(options.type, options.url, options.async);
 			xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
-			xhr.send(options.data);
 		}else{
+			options.url += options.url.indexOf('?')>-1?'&'+options.data:'?'+options.data;
+			options.data = null;
 			xhr.open(options.type, options.url + '?'+ options.data, options.async);
-			xhr.send(null);
 		}
+		if(options.xhrFields){
+			for(var field in options.xhrFields){
+				xhr[field]= options.xhrFields[field];
+			}
+		}
+		xhr.send(options.data);
 		//超时处理
 		var requestDone = false;
 		setTimeout(function() {
