@@ -28,6 +28,15 @@ if (!Date.now) {
 	};
 }
 
+//对象
+if (typeof Object.create !== 'function') {  
+    Object.create = function(o) {  
+        function F() {}  
+        F.prototype = o;  
+		return new F();  
+    };  
+}
+
 //数组
 if(!Array.isArray) {
     Array.isArray = function (obj) {
