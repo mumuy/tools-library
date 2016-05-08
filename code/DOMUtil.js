@@ -1,6 +1,6 @@
 //跨浏览器DOM对象
 var DOMUtil = {
-	getStyle:function(node,attr){
+		getStyle:function(node,attr){
     	return node.currentStyle ? node.currentStyle[attr] : getComputedStyle(node,0)[attr];
     },
     getScroll:function(){			//获取滚动条的滚动距离
@@ -30,7 +30,7 @@ var DOMUtil = {
 	        }
 	    }
 	},
-    getClient:function(){			//获取浏览器的可视区域位置
+  getClient:function(){			//获取浏览器的可视区域位置
 		var l,t,w,h;
 		l  =  document.documentElement.scrollLeft || document.body.scrollLeft;
 		t  =  document.documentElement.scrollTop || document.body.scrollTop;
@@ -38,7 +38,7 @@ var DOMUtil = {
 		h =   document.documentElement.clientHeight;
 		return {'left':l,'top':t,'width':w,'height':h} ;
 	},
-    getNextElement:function(node){	//获取下一个节点
+  getNextElement:function(node){	//获取下一个节点
     	if(node.nextElementSibling){
     		return node.nextElementSibling;
     	}else{
@@ -46,7 +46,7 @@ var DOMUtil = {
 	        while(NextElementNode.nodeValue != null){
 	            NextElementNode = NextElementNode.nextSibling
 	        }
-	        return NextElementNode;    		
+	        return NextElementNode;
     	}
 	},
 	getElementById:function(idName){
@@ -78,7 +78,7 @@ var DOMUtil = {
 	    return results;
 	},
 	hasClass:function(node,classname){
-		return node.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)')); 
+		return node.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
 	},
 	addClass:function(node,classname){ 			//对节点增加class
 		if(!this.hasClass(node,classname)){
