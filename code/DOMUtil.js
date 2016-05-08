@@ -17,6 +17,19 @@ var DOMUtil = {
 	    }
 	    return scrollPos;
     },
+    getWindow:function(){	//获取可视窗口大小
+	    if(typeof window.innerWidth !='undefined') {
+	        return{
+	            width : window.innerWidth,
+	            height : window.innerHeight
+	        }
+	    }else{
+	        return {
+	            width : document.documentElement.clientWidth,
+	            height : document.documentElement.clientHeight
+	        }
+	    }
+	},
     getClient:function(){			//获取浏览器的可视区域位置
 		var l,t,w,h;
 		l  =  document.documentElement.scrollLeft || document.body.scrollLeft;
