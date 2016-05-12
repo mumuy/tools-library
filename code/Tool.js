@@ -67,27 +67,34 @@ var Tool = {
 		for(i=0;i<arr.length&&arr[i]!=val;i++);
 			return!(i==arr.length);
 	},
-	imageDownload:function(resources, callback) {	//图片加载完成后执行
-	    var num = len,len = resources.length;
-	    var list = [];
-	    for(var i=0;i<len;i++){
-	    	(function(url){
-	    		var $item = new Image();
-	    		$item.src = url;
-	    		list.push($item);
-		        var doSomething = function(){
-		            num--;
-		            if (!num) {
-		                callback(list);
-		            }
-		            $item.onload = null;
-		        };
-		        if ($item.complete && $item.width) {
-		            doSomething();
-		        } else {
-		            $item.onload = doSomething;
-		        }
-	    	})(resources[i]);
+	isNull: function(a){ 
+	 	return a === null;
+	},
+	isUndefined: function(a){
+	 	return a === undefined;
+	},
+	isNumber: function(a){
+	 	return typeof a === 'number';
+	},
+	isString: function(a){
+	 	return typeof a === 'string';
+	},
+	isBoolean: function(a){
+	 	return typeof a === 'boolean';
+	},
+	isArray: function(a){
+	 	return Object.prototype.toString.call(a) === '[object Array]';
+	},
+	isFunction: function(a){
+	 	return Function.prototype.toString.call(a) === '[object Function]';
+	},
+	isWindow: function(o){
+		return o && typeof o === 'object' && 'setInterval' in o;
+	},
+	isEmptyObject: function(o){
+	    for(var a in o) {
+	 		return false;
 	    }
+	    return true;
 	}
 }
