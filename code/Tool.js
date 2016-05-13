@@ -63,6 +63,24 @@ var Tool = {
 		}
 		return fmt; 
 	},
+	loadScript:function(url, callback){
+		var script = document.createElement("script");
+		script.type = "text/javascript";
+		if (script.readyState){		//IE
+			script.onreadystatechange = function(){
+				if (script.readyState == "loaded" || script.readyState == "complete"){
+					script.onreadystatechange = null;
+					callback();
+				};
+			};
+		} else {					//Others: Firefox, Safari, Chrome, and Opera
+			script.onload = function(){
+				callback();
+			};
+		};
+		script.src = url;
+		document.body.appendChild(script);
+	},
 	in_array:function(val,arr){						//元素是否在数组中
 		for(i=0;i<arr.length&&arr[i]!=val;i++);
 			return!(i==arr.length);

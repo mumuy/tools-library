@@ -30,7 +30,7 @@ var DOMUtil = {
 	        }
 	    }
 	},
-  getClient:function(){			//获取浏览器的可视区域位置
+  	getClient:function(){			//获取浏览器的可视区域位置
 		var l,t,w,h;
 		l  =  document.documentElement.scrollLeft || document.body.scrollLeft;
 		t  =  document.documentElement.scrollTop || document.body.scrollTop;
@@ -38,7 +38,7 @@ var DOMUtil = {
 		h =   document.documentElement.clientHeight;
 		return {'left':l,'top':t,'width':w,'height':h} ;
 	},
-  getNextElement:function(node){	//获取下一个节点
+  	getNextElement:function(node){	//获取下一个节点
     	if(node.nextElementSibling){
     		return node.nextElementSibling;
     	}else{
