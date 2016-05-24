@@ -1,35 +1,11 @@
-# ajax
-ajax原生实现,和jquery参数含义一致
+## 文件说明(code)
+* ajax.js 原生ajax解决方案(类似于jquery)
+* Browser.js 浏览器信息对象 [查看](http://passer-by.com/tools-library/browser/)
+* DOMUtil.js DOM操作兼容性解决方案
+* EventUtil.js 浏览器事件兼容性解决方案
+* ECMAScript5.js 让低版本浏览器支持ECMAScript的解决方案
+* Common.js 建站通用方法
+* Tool.js 常用的工具方法
 
-url
-请求地址
-
-type
-请求类型,GET或者POST
-
-timeout
-超时时间
-
-async
-是否异步
-
-complete
-完成后执行
-
-error
-请求失败后执行
-
-success
-请求成功后执行
-
-dataType
-请求的数据类型,xml/text/json/jsonp
-
-data
-参数
-
-jsonp
-回调函数参数名
-
-jsonpCallback
-回调函数名
+## 浏览器bug汇总
+[IE8-](http://passer-by.com/tools-library/ie-bug/)
