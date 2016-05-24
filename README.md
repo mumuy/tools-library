@@ -5,7 +5,7 @@
 * EventUtil.js 浏览器事件兼容性解决方案
 * ECMAScript5.js 让低版本浏览器支持ECMAScript的解决方案
 * Common.js 建站通用方法
-* Tool.js 常用的工具方法
+* Tool.js 常用工具方法
 
 ## 浏览器bug汇总
 [IE8-](http://passer-by.com/tools-library/ie-bug/)
