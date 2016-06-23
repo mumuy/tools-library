@@ -4,17 +4,18 @@ var Browser = function(userAgent){
 	var _this = this;
 	var match = {
 		//内核
-		Trident: u.indexOf('Trident')>0,
+		Trident: u.indexOf('Trident')>0||u.indexOf('NET CLR')>0,
 		Presto: u.indexOf('Presto')>0,
         WebKit: u.indexOf('AppleWebKit')>0,
         Gecko: u.indexOf('Gecko')>0,
 		//浏览器
-		UC: u.indexOf('UC')>0||u.indexOf('UBrowser')>0,
+		UC: u.indexOf('UC')>0||u.indexOf(' UBrowser')>0,
 		QQ: u.indexOf('QQBrowser')>0,
 		BaiDu: u.indexOf('Baidu')>0||u.indexOf('BIDUBrowser')>0,
 		Maxthon: u.indexOf('Maxthon')>0,
+		LBBROWSER: u.indexOf('LBBROWSER')>0,
 		SouGou: u.indexOf('MetaSr')>0||u.indexOf('Sogou')>0,
-		IE: u.indexOf('MSIE')>0,
+		IE: u.indexOf('MSIE')>0||u.indexOf('Trident')>0,
 		Firefox: u.indexOf('Firefox')>0,
 		Opera: u.indexOf('Opera')>0||u.indexOf('OPR')>0,
 		Safari: u.indexOf('Safari')>0,
@@ -33,27 +34,27 @@ var Browser = function(userAgent){
 		//设备
 		Mobile:u.indexOf('Mobi')>0||u.indexOf('iPh')>0||u.indexOf('480')>0,
 		Tablet:u.indexOf('Tablet')>0||u.indexOf('iPad')>0||u.indexOf('Nexus 7')>0
-	}
+	};
+	var filter = {
+		Gecko: u.indexOf('like Gecko')>0
+	};
 	//修正
-	if(!match.Trident){
-		match.Trident = match.IE;
-	}
 	if(match.Gecko){
-		match.Gecko = !match.WebKit;
+		match.Gecko = !filter.Gecko;
 	}
 	if(match.Chrome){
-		match.Chrome = !(match.Opera + match.BaiDu + match.Maxthon + match.SouGou + match.UC + match.QQ);
+		match.Chrome = !(match.Opera + match.BaiDu + match.Maxthon + match.SouGou + match.UC + match.QQ + match.LBBROWSER);
 	}
 	if(match.Safari){
-		match.Safari = !(match.Chrome + match.Opera + match.BaiDu + match.Maxthon + match.SouGou + match.UC + match.QQ);
+		match.Safari = !(match.Chrome + match.Opera + match.BaiDu + match.Maxthon + match.SouGou + match.UC + match.QQ + match.LBBROWSER);
 	}
 	if(match.Mobile){
 		match.Mobile = !match.iPad;
 	}
-	//信息输出
+	//基本信息
 	var hash = {
 		engine:['Trident','Presto','WebKit','Gecko'],
-		browser:['UC','QQ','BaiDu','Maxthon','SouGou','IE','Firefox','Opera','Safari','Chrome'],
+		browser:['UC','QQ','BaiDu','Maxthon','SouGou','IE','Firefox','Opera','Safari','Chrome','LBBROWSER'],
 		os:['Windows','Mac','Android','WP','BlackBerry','MeeGo','Symbian','iOS','iPhone','iPad'],
 		device:['Mobile','Tablet']
 	};
@@ -67,7 +68,43 @@ var Browser = function(userAgent){
 			var value = hash[s][i];
 			if(match[value]){
 				_this[s] = value;
+				break;
 			}
 		}
+	}
+	//版本信息
+	var version = {
+		'Chrome':function(){
+			return u.replace(/^(.*)Chrome\/([\d.]+)(.*)$/,'$2');
+		},
+		'IE':function(){
+			var v = u.replace(/^(.*)MSIE ([\d.]+)(.*)$/,'$2');
+			if(v==u){
+				v = u.replace(/^(.*)rv:([\d.]+)(.*)$/,'$2');
+			}
+			return v!=u?v:'';
+		},			
+		'Firefox':function(){
+			return u.replace(/^(.*)Firefox\/([\d.]+)(.*)$/,'$2');
+		},
+		'Safari':function(){
+			return u.replace(/^(.*)Version\/([\d.]+)(.*)$/,'$2');
+		},
+		'Maxthon':function(){
+			return u.replace(/^(.*)Maxthon\/([\d.]+)(.*)$/,'$2');
+		},
+		'QQ':function(){
+			return u.replace(/^(.*)QQBrowser\/([\d.]+)(.*)$/,'$2');
+		},
+		'BaiDu':function(){
+			return u.replace(/^(.*)BIDUBrowser[\s\/]([\d.]+)(.*)$/,'$2');
+		},
+		'UC':function(){
+			return u.replace(/^(.*)UBrowser\/([\d.]+)(.*)$/,'$2');
+		},
+	};
+	_this.version = '';
+	if(version[_this.browser]){
+		_this.version = version[_this.browser]();
 	}
 };
