@@ -74,12 +74,14 @@ function ajax(params){
 			requestDone = true;
 			if(xhr.readyState != 4){
 				xhr.abort();
+				options.error();
 			}
+			options.complete();
 		}, options.timeout);
 		//状态处理
 		xhr.onreadystatechange = function(){
 			if(xhr.readyState == 4&&!requestDone) {
-				if(xhr.status>=200 && xhr.status<300) {
+				if(xhr.status>=200 && xhr.status<300||xhr.status == 304) {
 					var data = options.dataType == "xml" ? xhr.responseXML : xhr.responseText;
 					if (options.dataType == "json") {
 						try{
