@@ -4,18 +4,18 @@ function ajax(params){
         throw new Error('Necessary parameters are missing.'); //必要参数未填
     }
 	var options = {
-		url: params.url||'',	//接口地址
-		type: (params.type||'GET').toUpperCase(),	//请求方式
-		timeout: params.timeout||5000,	//超时等待时间
-		async : true,	//是否异步
-		xhrFields:{},	//设置XHR对象属性键值对。如果需要，可设置withCredentials为true的跨域请求。
-		dataType: params.dataType||'json',	//请求的数据类型
-		data: params.data||{},	//参数
-		jsonp:'callback',
-		jsonpCallback:('jsonp_' + Math.random()).replace('.',''),
-		error: params.error||function() {},
-		success: params.success||function(){},		
-		complete: params.complete||function(){}
+		url: params.url||'',								//接口地址
+		type: (params.type||'GET').toUpperCase(),			//请求方式
+		timeout: params.timeout||5000,						//超时等待时间
+		async : true,										//是否异步
+		xhrFields:{},										//设置XHR对象属性键值对。如果需要，可设置withCredentials为true的跨域请求。
+		dataType: (params.dataType||'json').toLowerCase(),	//请求的数据类型
+		data: params.data||{},								//参数
+		jsonp:'callback',											//传递请求完成后的函数名
+		jsonpCallback:('jsonp_' + Math.random()).replace('.',''),	//请求完成后的函数名
+		error: params.error||function() {},					//请求失败后调用
+		success: params.success||function(){},				//请求成功后调用
+		complete: params.complete||function(){}				//请求完成后调用
 	};	
 	var formatParams = function(json) {
         var arr = [];
