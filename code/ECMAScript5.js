@@ -1,10 +1,32 @@
+/*
+	ECMAScript5 Polyfill
+*/
+
 //函数
-Function.prototype.bind = Function.prototype.bind || function(context){
-    var self = this;
-    return function() {
-        return self.apply(context, arguments);
-    }
-};
+if (!Function.prototype.bind) {
+  	Function.prototype.bind = function(oThis) {
+	    if (typeof this !== 'function') {
+	      	// closest thing possible to the ECMAScript 5
+	      	// internal IsCallable function
+	      	throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+	    }
+	    var aArgs   = Array.prototype.slice.call(arguments, 1),
+	        fToBind = this,
+	        fNOP    = function() {},
+	        fBound  = function() {
+	          	return fToBind.apply(this instanceof fNOP
+	                ? this
+	                : oThis,
+	                aArgs.concat(Array.prototype.slice.call(arguments)));
+	        };
+	    if (this.prototype) {
+	      	// Function.prototype doesn't have a prototype property
+	      	fNOP.prototype = this.prototype; 
+	    }
+	    fBound.prototype = new fNOP();
+	    return fBound;
+  	};
+}
 
 //数值
 if(!Number.toFixed){
@@ -27,49 +49,91 @@ if (!Date.now){
     	return new Date().getTime();
 	};
 }
-if (!Date.prototype.toISOString){
-    (function(){
-        function pad(number) {
-            var r = String(number);
-            if (r.length === 1) {
-                r = '0' + r;
-            }
-            return r;
-        }
-        Date.prototype.toISOString = function(){
-            return this.getUTCFullYear()
-                + '-' + pad(this.getUTCMonth() + 1)
-                + '-' + pad(this.getUTCDate())
-                + 'T' + pad(this.getUTCHours())
-                + ':' + pad(this.getUTCMinutes())
-                + ':' + pad(this.getUTCSeconds())
-                + '.' + String((this.getUTCMilliseconds()/1000).toFixed(3)).slice(2,5)
-                + 'Z';
-        };
-    }());
+if (!Date.prototype.toISOString) {
+  	(function() {
+    function pad(number) {
+      if (number < 10) {
+        return '0' + number;
+      }
+      return number;
+    }
+    Date.prototype.toISOString = function() {
+      return this.getUTCFullYear() +
+        '-' + pad(this.getUTCMonth() + 1) +
+        '-' + pad(this.getUTCDate()) +
+        'T' + pad(this.getUTCHours()) +
+        ':' + pad(this.getUTCMinutes()) +
+        ':' + pad(this.getUTCSeconds()) +
+        '.' + (this.getUTCMilliseconds() / 1000).toFixed(3).slice(2, 5) +
+        'Z';
+    };
+  }());
 }
 
 //对象
-if (typeof Object.create !== 'function') {  
-    Object.create = function(o) {  
-        function F() {}  
-        F.prototype = o;  
-		return new F();  
-    };  
+if (typeof Object.create != 'function') {
+  	Object.create = (function(undefined) {
+	    var Temp = function() {};
+	    return function (prototype, propertiesObject) {
+		    if(prototype !== Object(prototype) && prototype !== null) {
+		    	throw TypeError('Argument must be an object, or null');
+		    }
+		    Temp.prototype = prototype || {};
+		    if (propertiesObject !== undefined) {
+		        Object.defineProperties(Temp.prototype, propertiesObject);
+		    } 
+		    var result = new Temp(); 
+		    Temp.prototype = null;
+		    // to imitate the case of Object.create(null)
+		    if(prototype === null) {
+		        result.__proto__ = null;
+		    } 
+		    return result;
+	    };
+  	})();
 }
-if (!Object.keys) Object.keys = function(o) {
-	if (o !== Object(o))
-    	throw new TypeError('Object.keys called on a non-object');
-  	var k=[],p;
-  	for (p in o) if (Object.prototype.hasOwnProperty.call(o,p)) k.push(p);
-  	return k;
+if (!Object.keys) {
+  	Object.keys = (function() {
+    	'use strict';
+    	var hasOwnProperty = Object.prototype.hasOwnProperty,
+        hasDontEnumBug = !({ toString: null }).propertyIsEnumerable('toString'),
+        dontEnums = [
+        	'toString',
+        	'toLocaleString',
+        	'valueOf',
+        	'hasOwnProperty',
+        	'isPrototypeOf',
+        	'propertyIsEnumerable',
+        	'constructor'
+        ],
+        dontEnumsLength = dontEnums.length;
+	    return function(obj) {
+	      	if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
+	        	throw new TypeError('Object.keys called on non-object');
+	      	}
+	      	var result = [], prop, i;
+	      	for (prop in obj) {
+	        	if (hasOwnProperty.call(obj, prop)) {
+	          		result.push(prop);
+	        	}
+	      	}
+	      	if (hasDontEnumBug) {
+	        	for (i = 0; i < dontEnumsLength; i++) {
+	          		if (hasOwnProperty.call(obj, dontEnums[i])) {
+	            		result.push(dontEnums[i]);
+	          		}
+	        	}
+	      	}
+	      	return result;
+	    };
+  	}());
 }
 
 //数组
-if(!Array.isArray) {
-    Array.isArray = function (obj) {
-        return Object.prototype.toString.call(obj) === "[object Array]";
-    };
+if (!Array.isArray) {
+  	Array.isArray = function(arg) {
+    	return Object.prototype.toString.call(arg) === '[object Array]';
+  	};
 }
 if (typeof Array.prototype.forEach != "function") {
   	Array.prototype.forEach = function (fn, context) {
