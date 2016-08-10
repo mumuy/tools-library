@@ -7,7 +7,7 @@ var Browser = function(userAgent){
 		Trident: u.indexOf('Trident')>0||u.indexOf('NET CLR')>0,
 		Presto: u.indexOf('Presto')>0,
         WebKit: u.indexOf('AppleWebKit')>0,
-        Gecko: u.indexOf('Gecko')>0,
+        Gecko: u.indexOf('Gecko/')>0,
 		//浏览器
 		UC: u.indexOf('UC')>0||u.indexOf(' UBrowser')>0,
 		QQ: u.indexOf('QQBrowser')>0,
@@ -36,13 +36,7 @@ var Browser = function(userAgent){
 		Mobile:u.indexOf('Mobi')>0||u.indexOf('iPh')>0||u.indexOf('480')>0,
 		Tablet:u.indexOf('Tablet')>0||u.indexOf('iPad')>0||u.indexOf('Nexus 7')>0
 	};
-	var filter = {
-		Gecko: u.indexOf('like Gecko')>0
-	};
 	//修正
-	if(match.Gecko){
-		match.Gecko = !filter.Gecko;
-	}
 	if(match.Chrome){
 		match.Chrome = !(match.Opera + match.BaiDu + match.Maxthon + match.SouGou + match.UC + match.QQ + match.LBBROWSER);
 	}
