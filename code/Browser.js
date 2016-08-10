@@ -20,6 +20,7 @@ var Browser = function(userAgent){
 		Opera: u.indexOf('Opera')>0||u.indexOf('OPR')>0,
 		Safari: u.indexOf('Safari')>0,
 		Chrome:u.indexOf('Chrome')>0||u.indexOf('CriOS')>0,
+		Wechat:u.indexOf('MicroMessenger')>0,
 		//系统或平台
 		Windows:u.indexOf('Windows')>0,
 		Mac:u.indexOf('Macintosh')>0,
@@ -54,7 +55,7 @@ var Browser = function(userAgent){
 	//基本信息
 	var hash = {
 		engine:['Trident','Presto','WebKit','Gecko'],
-		browser:['UC','QQ','BaiDu','Maxthon','SouGou','IE','Firefox','Opera','Safari','Chrome','LBBROWSER'],
+		browser:['UC','QQ','BaiDu','Maxthon','SouGou','IE','Firefox','Opera','Safari','Chrome','LBBROWSER','Wechat'],
 		os:['Windows','Mac','Android','WP','BlackBerry','MeeGo','Symbian','iOS','iPhone','iPad'],
 		device:['Mobile','Tablet']
 	};
@@ -75,33 +76,36 @@ var Browser = function(userAgent){
 	//版本信息
 	var version = {
 		'Chrome':function(){
-			return u.replace(/^(.*)Chrome\/([\d.]+)(.*)$/,'$2');
+			return u.replace(/^.*Chrome\/([\d.]+).*$/,'$1');
 		},
 		'IE':function(){
-			var v = u.replace(/^(.*)MSIE ([\d.]+)(.*)$/,'$2');
+			var v = u.replace(/^.*MSIE ([\d.]+).*$/,'$1');
 			if(v==u){
-				v = u.replace(/^(.*)rv:([\d.]+)(.*)$/,'$2');
+				v = u.replace(/^.*rv:([\d.]+).*$/,'$1');
 			}
 			return v!=u?v:'';
 		},			
 		'Firefox':function(){
-			return u.replace(/^(.*)Firefox\/([\d.]+)(.*)$/,'$2');
+			return u.replace(/^.*Firefox\/([\d.]+).*$/,'$1');
 		},
 		'Safari':function(){
-			return u.replace(/^(.*)Version\/([\d.]+)(.*)$/,'$2');
+			return u.replace(/^.*Version\/([\d.]+).*$/,'$1');
 		},
 		'Maxthon':function(){
-			return u.replace(/^(.*)Maxthon\/([\d.]+)(.*)$/,'$2');
+			return u.replace(/^.*Maxthon\/([\d.]+).*$/,'$1');
 		},
 		'QQ':function(){
-			return u.replace(/^(.*)QQBrowser\/([\d.]+)(.*)$/,'$2');
+			return u.replace(/^.*QQBrowser\/([\d.]+).*$/,'$1');
 		},
 		'BaiDu':function(){
-			return u.replace(/^(.*)BIDUBrowser[\s\/]([\d.]+)(.*)$/,'$2');
+			return u.replace(/^.*BIDUBrowser[\s\/]([\d.]+).*$/,'$1');
 		},
 		'UC':function(){
-			return u.replace(/^(.*)UBrowser\/([\d.]+)(.*)$/,'$2');
+			return u.replace(/^.*UBrowser\/([\d.]+).*$/,'$1');
 		},
+		'Wechat':function(){
+			return u.replace(/^.*MicroMessenger\/([\d.]+).*$/,'$1');
+		}
 	};
 	_this.version = '';
 	if(version[_this.browser]){
