@@ -16,11 +16,11 @@ function ajax(params){
 		error: params.error||function() {},					//请求失败后调用
 		success: params.success||function(){},				//请求成功后调用
 		complete: params.complete||function(){}				//请求完成后调用
-	};	
+	};
 	var formatParams = function(json) {
         var arr = [];
         for(var i in json) {
-            arr.push(encodeURIComponent(i) + '=' + encodeURIComponent(json[i]));    
+            arr.push(encodeURIComponent(i) + '=' + encodeURIComponent(json[i]));
         }
         return arr.join("&");
     };
@@ -28,7 +28,7 @@ function ajax(params){
 		//插入动态脚本及回调函数
 		var $head = document.getElementsByTagName('head')[0];
 		var $script = document.createElement('script');
-		$head.appendChild($script);	
+		$head.appendChild($script);
         window[options.jsonpCallback] = function (json) {
             $head.removeChild($script);
             window[options.jsonpCallback] = null;
@@ -59,8 +59,8 @@ function ajax(params){
 			xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
 		}else{
 			options.url += options.url.indexOf('?')>-1?'&'+options.data:'?'+options.data;
+			xhr.open(options.type, options.url, options.async);
 			options.data = null;
-			xhr.open(options.type, options.url + '?'+ options.data, options.async);
 		}
 		if(options.xhrFields){
 			for(var field in options.xhrFields){
@@ -96,6 +96,6 @@ function ajax(params){
 				}
 				options.complete();
 			}
-		};		
+		};
 	}
 }
