@@ -23,6 +23,7 @@ var Browser = function(userAgent){
 		Wechat:u.indexOf('MicroMessenger')>0,
 		//系统或平台
 		Windows:u.indexOf('Windows')>0,
+		Linux:u.indexOf('Linux')>0,
 		Mac:u.indexOf('Macintosh')>0,
 		Android:u.indexOf('Android')>0||u.indexOf('Adr')>0,
 		WP:u.indexOf('IEMobile')>0,
@@ -48,9 +49,9 @@ var Browser = function(userAgent){
 	}
 	//基本信息
 	var hash = {
-		engine:['Trident','Presto','WebKit','Gecko'],
-		browser:['UC','QQ','BaiDu','Maxthon','SouGou','IE','Firefox','Opera','Safari','Chrome','LBBROWSER','Wechat'],
-		os:['Windows','Mac','Android','WP','BlackBerry','MeeGo','Symbian','iOS','iPhone','iPad'],
+		engine:['WebKit','Trident','Gecko','Presto'],
+		browser:['Chrome','IE','Firefox','Opera','Safari','UC','QQ','BaiDu','Maxthon','SouGou','LBBROWSER','Wechat'],
+		os:['Windows','Linux','Mac','Android','iOS','iPhone','iPad','WP','BlackBerry','MeeGo','Symbian'],
 		device:['Mobile','Tablet']
 	};
 	_this.device = 'PC';
@@ -63,7 +64,6 @@ var Browser = function(userAgent){
 			var value = hash[s][i];
 			if(match[value]){
 				_this[s] = value;
-				break;
 			}
 		}
 	}
