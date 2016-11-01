@@ -11,8 +11,8 @@ function ajax(params){
 		xhrFields:{},										//设置XHR对象属性键值对。如果需要，可设置withCredentials为true的跨域请求。
 		dataType: (params.dataType||'json').toLowerCase(),	//请求的数据类型
 		data: params.data||{},								//参数
-		jsonp:'callback',											//传递请求完成后的函数名
-		jsonpCallback:('jsonp_' + Math.random()).replace('.',''),	//请求完成后的函数名
+		jsonp:params.jsonp||'callback',						//传递请求完成后的函数名
+		jsonpCallback:params.jsonpCallback||('jsonp_' + Math.random()).replace('.',''),	//请求完成后的函数名
 		error: params.error||function() {},					//请求失败后调用
 		success: params.success||function(){},				//请求成功后调用
 		complete: params.complete||function(){}				//请求完成后调用
@@ -24,6 +24,9 @@ function ajax(params){
         }
         return arr.join("&");
     };
+    if(typeof options.data =='object'){
+        options.data = formatParams(options.data);
+    }
 	if(options.dataType=='jsonp'){
 		//插入动态脚本及回调函数
 		var $head = document.getElementsByTagName('head')[0];
@@ -37,8 +40,12 @@ function ajax(params){
             options.complete();
         };
         //发送请求
-        options.data[options.jsonp] = options.jsonpCallback;
-        $script.src = options.url + '?' + formatParams(options.data);
+        if(options.data){
+            options.data += '&'+options.jsonp+'='+options.jsonpCallback;
+        }else{
+            options.data += options.jsonp+'='+options.jsonpCallback;
+        }
+        $script.src = options.url + '?' + options.data;
         //超时处理
         var hander = setTimeout(function(){
             $head.removeChild($script);
@@ -53,7 +60,6 @@ function ajax(params){
 			return false;
 		}
 		//发送请求
-		options.data = formatParams(options.data);
 		if (options.type == 'POST') {
 			xhr.open(options.type, options.url, options.async);
 			xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
