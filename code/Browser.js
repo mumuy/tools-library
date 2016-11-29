@@ -51,7 +51,7 @@ var Browser = function(userAgent){
 	//基本信息
 	var hash = {
 		engine:['WebKit','Trident','Gecko','Presto'],
-		browser:['Chrome','IE','Firefox','Opera','Safari','UC','QQ','BaiDu','Maxthon','SouGou','LBBROWSER','Wechat'],
+		browser:['Chrome','IE','Firefox','Opera','Safari','UC','QQBrowser','QQ','BaiDu','Maxthon','SouGou','LBBROWSER','Wechat'],
 		os:['Windows','Linux','Mac','Android','iOS','iPhone','iPad','WP','BlackBerry','MeeGo','Symbian'],
 		device:['Mobile','Tablet']
 	};
