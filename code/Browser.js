@@ -90,10 +90,10 @@ var Browser = function(userAgent){
 			return u.replace(/^.*Maxthon\/([\d.]+).*$/,'$1');
 		},
 		'QQBrowser':function(){
-			return u.replace(/^.*QQBrowser?\/([\d.]+).*$/,'$1');
+			return u.replace(/^.*QQBrowser\/([\d.]+).*$/,'$1');
 		},
 		'QQ':function(){
-			return u.replace(/^.*QQ?\/([\d.]+).*$/,'$1');
+			return u.replace(/^.*QQ\/([\d.]+).*$/,'$1');
 		},
 		'BaiDu':function(){
 			return u.replace(/^.*BIDUBrowser[\s\/]([\d.]+).*$/,'$1');
