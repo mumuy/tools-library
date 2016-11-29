@@ -10,7 +10,8 @@ var Browser = function(userAgent){
         Gecko: u.indexOf('Gecko/')>0,
 		//浏览器
 		UC: u.indexOf('UC')>0||u.indexOf(' UBrowser')>0,
-		QQ: u.indexOf('QQBrowser')>0,
+		QQBrowser: u.indexOf('QQBrowser')>0,
+		QQ: u.indexOf('QQ/')>0,
 		BaiDu: u.indexOf('Baidu')>0||u.indexOf('BIDUBrowser')>0,
 		Maxthon: u.indexOf('Maxthon')>0,
 		LBBROWSER: u.indexOf('LBBROWSER')>0,
@@ -88,8 +89,11 @@ var Browser = function(userAgent){
 		'Maxthon':function(){
 			return u.replace(/^.*Maxthon\/([\d.]+).*$/,'$1');
 		},
+		'QQBrowser':function(){
+			return u.replace(/^.*QQBrowser?\/([\d.]+).*$/,'$1');
+		},
 		'QQ':function(){
-			return u.replace(/^.*QQBrowser\/([\d.]+).*$/,'$1');
+			return u.replace(/^.*QQ?\/([\d.]+).*$/,'$1');
 		},
 		'BaiDu':function(){
 			return u.replace(/^.*BIDUBrowser[\s\/]([\d.]+).*$/,'$1');
