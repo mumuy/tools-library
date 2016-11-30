@@ -3,19 +3,22 @@ function ajax(params){
 	if (!params.url) {
         throw new Error('Necessary parameters are missing.'); //必要参数未填
     }
+    var random = +new Date;
+    var hander = null;
 	var options = {
-		url: params.url||'',								//接口地址
-		type: (params.type||'GET').toUpperCase(),			//请求方式
-		timeout: params.timeout||5000,						//超时等待时间
-		async : true,										//是否异步
-		xhrFields:{},										//设置XHR对象属性键值对。如果需要，可设置withCredentials为true的跨域请求。
-		dataType: (params.dataType||'json').toLowerCase(),	//请求的数据类型
-		data: params.data||{},								//参数
-		jsonp:params.jsonp||'callback',						//传递请求完成后的函数名
-		jsonpCallback:params.jsonpCallback||('jsonp_' + Math.random()).replace('.',''),	//请求完成后的函数名
-		error: params.error||function() {},					//请求失败后调用
-		success: params.success||function(){},				//请求成功后调用
-		complete: params.complete||function(){}				//请求完成后调用
+		url: '',								//接口地址
+		type: 'GET',							//请求方式
+		timeout: 5000,							//超时等待时间
+		cache: true,							//缓存 
+		async: true,							//是否异步
+		xhrFields: {},							//设置XHR对象属性键值对。如果需要，可设置withCredentials为true的跨域请求。
+		dataType: 'json',						//请求的数据类型
+		data: {},								//参数
+		jsonp: 'callback',						//传递请求完成后的函数名
+		jsonpCallback: 'jsonp_' + random,		//请求完成后的函数名
+		error: function() {},					//请求失败后调用
+		success: function(){},					//请求成功后调用
+		complete: function(){}					//请求完成后调用
 	};
 	var formatParams = function(json) {
         var arr = [];
@@ -24,10 +27,23 @@ function ajax(params){
         }
         return arr.join("&");
     };
+    for(var i in params){
+    	switch(i){
+    		case 'type':
+    			options[i] = params[i].toUpperCase();
+    			break;
+    		case 'dataType':
+    			options[i] = params[i].toLowerCase();
+    			break;
+    		default:
+    			options[i] = params[i];
+    	}
+    }
     if(typeof options.data =='object'){
         options.data = formatParams(options.data);
     }
 	if(options.dataType=='jsonp'){
+		options.cache = params.cache||false;
 		//插入动态脚本及回调函数
 		var $head = document.getElementsByTagName('head')[0];
 		var $script = document.createElement('script');
@@ -40,20 +56,22 @@ function ajax(params){
             options.complete();
         };
         //发送请求
-        if(options.data){
-            options.data += '&'+options.jsonp+'='+options.jsonpCallback;
-        }else{
-            options.data += options.jsonp+'='+options.jsonpCallback;
+        if(options.cache){
+        	options.data += options.data?'&_'+random:'_'+random;
         }
-        $script.src = options.url + '?' + options.data;
+        options.data += '&'+options.jsonp+'='+options.jsonpCallback;
+        $script.src = (options.url + '?' + options.data).replace('?&','?');
         //超时处理
-        var hander = setTimeout(function(){
+       	hander = setTimeout(function(){
             $head.removeChild($script);
             window[options.jsonpCallback] = null;
             options.error();
             options.complete();
         }, options.timeout);
 	}else{
+		if(options.cache){
+			options.data += options.data?'&_'+random:'_'+random;
+        }
 		//创建xhr对象
 		var xhr = new (self.XMLHttpRequest||ActiveXObject)("Microsoft.XMLHTTP");
 		if(!xhr){
@@ -76,7 +94,7 @@ function ajax(params){
 		xhr.send(options.data);
 		//超时处理
 		var requestDone = false;
-		setTimeout(function() {
+		hander = setTimeout(function() {
 			requestDone = true;
 			if(xhr.readyState != 4){
 				xhr.abort();
@@ -100,6 +118,7 @@ function ajax(params){
 				} else {
 					options.error();
 				}
+				hander && clearTimeout(hander);
 				options.complete();
 			}
 		};
