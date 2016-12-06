@@ -1,6 +1,7 @@
 //图片加载完成后执行
 function imageDownload(resources, callback) {
-    var num = len,len = resources.length;
+    var len = resources.length;
+    var num = len;
     var list = [];
     for(var i=0;i<len;i++){
     	(function(url){
