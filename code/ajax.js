@@ -11,6 +11,7 @@ function ajax(params){
 		timeout: 5000,							//超时等待时间
 		cache: true,							//缓存 
 		async: true,							//是否异步
+		headers: {},							//
 		xhrFields: {},							//设置XHR对象属性键值对。如果需要，可设置withCredentials为true的跨域请求。
 		dataType: 'json',						//请求的数据类型
 		data: {},								//参数
@@ -85,6 +86,9 @@ function ajax(params){
 			options.url += options.url.indexOf('?')>-1?'&'+options.data:'?'+options.data;
 			xhr.open(options.type, options.url, options.async);
 			options.data = null;
+		}
+		for(var name in options.headers){
+			xhr.setRequestHeader(name,options.headers[name]);
 		}
 		if(options.xhrFields){
 			for(var field in options.xhrFields){
