@@ -83,7 +83,9 @@ function ajax(params){
 			xhr.open(options.type, options.url, options.async);
 			xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
 		}else{
-			options.url += options.url.indexOf('?')>-1?'&'+options.data:'?'+options.data;
+			if(options.data){
+                options.url += options.url.indexOf('?')>-1?'&'+options.data:'?'+options.data;
+            }
 			xhr.open(options.type, options.url, options.async);
 			options.data = null;
 		}
