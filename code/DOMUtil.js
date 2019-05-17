@@ -1,6 +1,6 @@
 //跨浏览器DOM对象
 var DOMUtil = {
-		getStyle:function(node,attr){
+	getStyle:function(node,attr){
     	return node.currentStyle ? node.currentStyle[attr] : getComputedStyle(node,0)[attr];
     },
     getScroll:function(){			//获取滚动条的滚动距离
@@ -78,7 +78,7 @@ var DOMUtil = {
 	    return results;
 	},
 	hasClass:function(node,classname){
-		return node.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+		return node.className.match(new RegExp('(\\s|^)'+classname+'(\\s|$)'));
 	},
 	addClass:function(node,classname){ 			//对节点增加class
 		if(!this.hasClass(node,classname)){
