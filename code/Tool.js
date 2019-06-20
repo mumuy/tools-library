@@ -43,7 +43,7 @@ var Tool = {
 		// 例子： 
 		// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
 		// (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18 
-		var day = new Date(timestamp);
+		var day = timestamp?new Date(timestamp):new Date();
 		var o = { 
 		    "M+" : day.getMonth()+1,                 //月份 
 		    "d+" : day.getDate(),                    //日 
