@@ -61,7 +61,11 @@ function ajax(params){
         	options.data += options.data?'&_'+random:'_'+random;
         }
         options.data += '&'+options.jsonp+'='+options.jsonpCallback;
-        $script.src = (options.url + '?' + options.data).replace('?&','?');
+        if(options.url.indexOf('?')>-1){
+        	$script.src = (options.url + options.data).replace('?&','?');
+        }else{
+        	$script.src = (options.url + '?' + options.data).replace('?&','?');
+        }
         //超时处理
        	hander = setTimeout(function(){
             $head.removeChild($script);
