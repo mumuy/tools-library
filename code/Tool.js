@@ -63,6 +63,22 @@ var Tool = {
 		}
 		return fmt; 
 	},
+	setClipboard(text,callback){
+		var callback = callback||function(){};
+		window.getSelection().removeAllRanges();
+		var selection = window.getSelection();
+	    var newdiv = document.createElement('div');
+	    newdiv.style.position = 'absolute';
+	    newdiv.style.left = '-99999px';
+	    document.body.appendChild(newdiv);
+	    newdiv.innerHTML = text;
+	    selection.selectAllChildren(newdiv);
+		document.execCommand("Copy");
+	    window.setTimeout(function () {
+	        document.body.removeChild(newdiv);
+	        callback();
+	    }, 100);
+	},
 	parseURL:function(url){			//URL解析
 	    var a =  document.createElement('a');
 	    a.href = url;
