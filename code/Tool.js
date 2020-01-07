@@ -79,6 +79,26 @@ var Tool = {
 	        callback();
 	    }, 100);
 	},
+	downloadImage(src){
+        var canvas = document.createElement('canvas');
+        var img = document.createElement('img');
+        var format = src.indexOf('.png')>-1?"image/png":"image/jpeg";
+        img.onload = function(e) {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            var context = canvas.getContext('2d');
+            context.drawImage(img, 0, 0, img.width, img.height);
+            canvas.getContext('2d').drawImage(img, 0, 0, img.width, img.height);
+            canvas.toBlob((blob)=>{
+                let link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = 'aaa'; 
+                link.click();  
+            }, format);
+        }
+        img.setAttribute("crossOrigin",'Anonymous');
+        img.src = src;
+    },
 	parseURL:function(url){			//URL解析
 	    var a =  document.createElement('a');
 	    a.href = url;
