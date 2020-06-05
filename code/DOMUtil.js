@@ -52,6 +52,15 @@ var DOMUtil = {
     getElementById:function(idName){
         return document.getElementById(idName);
     },
+    getStyle:function(element, property){
+        var proValue = null;
+        if (!document.defaultView) {
+            proValue = element.currentStyle[property];
+        } else {
+            proValue = document.defaultView.getComputedStyle(element)[property];
+        }
+        return proValue;
+    },
     getElementsByClassName:function(className,context,tagName){ //根据class获取节点
         if(typeof context == 'string'){
             tagName = context;
