@@ -44,9 +44,6 @@ function ajax(params){
     if(typeof options.data =='object'){
         params = formatParams(options.data);
     }
-    if(options.cache){
-    	params += (params?'&':'')+('_'+random);
-    }
 	if(options.dataType=='jsonp'||options.dataType=='script'){
 		options.cache = params.cache||false;
 		//插入动态脚本及回调函数
@@ -69,6 +66,9 @@ function ajax(params){
 			};
 		}
         //发送请求
+        if(options.cache){
+	    	params += (params?'&':'')+('_'+random);
+	    }
         if(options.dataType=='jsonp'){
         	params += (params?'&':'')+(options.jsonp+'='+options.jsonpCallback);
         }
@@ -96,6 +96,9 @@ function ajax(params){
 			xhr.open(options.type, options.url, options.async);
 			xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
 		}else{
+			if(options.cache){
+		    	params += (params?'&':'')+('_'+random);
+		    }
 			if(params){
             	options.url += (options.url.indexOf('?')>-1?'&':'?')+params;
 	        }
