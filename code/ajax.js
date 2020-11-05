@@ -44,6 +44,9 @@ function ajax(params){
     if(typeof options.data =='object'){
         params = formatParams(options.data);
     }
+    if(options.cache){
+    	params += (params?'&':'')+('_'+random);
+    }
 	if(options.dataType=='jsonp'||options.dataType=='script'){
 		options.cache = params.cache||false;
 		//插入动态脚本及回调函数
@@ -66,9 +69,6 @@ function ajax(params){
 			};
 		}
         //发送请求
-        if(options.cache){
-        	params += (params?'&':'')+('_'+random);
-        }
         if(options.dataType=='jsonp'){
         	params += (params?'&':'')+(options.jsonp+'='+options.jsonpCallback);
         }
@@ -86,9 +86,6 @@ function ajax(params){
             options.complete();
         }, options.timeout);
 	}else{
-		if(options.cache){
-			params += params?'&_'+random:'_'+random;
-        }
 		//创建xhr对象
 		var xhr = new (self.XMLHttpRequest||ActiveXObject)("Microsoft.XMLHTTP");
 		if(!xhr){
