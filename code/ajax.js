@@ -40,42 +40,54 @@ function ajax(params){
     			options[i] = params[i];
     	}
     }
+    var params = '';
     if(typeof options.data =='object'){
-        options.data = formatParams(options.data);
+        params = formatParams(options.data);
     }
-	if(options.dataType=='jsonp'){
+	if(options.dataType=='jsonp'||options.dataType=='script'){
 		options.cache = params.cache||false;
 		//插入动态脚本及回调函数
 		var $head = document.getElementsByTagName('head')[0];
 		var $script = document.createElement('script');
 		$head.appendChild($script);
-        window[options.jsonpCallback] = function (json) {
-            $head.removeChild($script);
-            window[options.jsonpCallback] = null;
-            hander && clearTimeout(hander);
-            options.success(json);
-            options.complete();
-        };
+		if(options.dataType=='jsonp'){
+	        window[options.jsonpCallback] = function (json) {
+	            $head.removeChild($script);
+	            window[options.jsonpCallback] = null;
+	            hander && clearTimeout(hander);
+	            options.success(json);
+	            options.complete();
+	        };
+		}else{
+			$script.onload = function(){
+				hander && clearTimeout(hander);
+	            options.success();
+	            options.complete();
+			};
+		}
         //发送请求
         if(options.cache){
-        	options.data += options.data?'&_'+random:'_'+random;
+        	params += (params?'&':'')+('_'+random);
         }
-        options.data += '&'+options.jsonp+'='+options.jsonpCallback;
-        if(options.url.indexOf('?')>-1){
-        	$script.src = (options.url + options.data).replace('?&','?');
-        }else{
-        	$script.src = (options.url + '?' + options.data).replace('?&','?');
+        if(options.dataType=='jsonp'){
+        	params += (params?'&':'')+(options.jsonp+'='+options.jsonpCallback);
         }
+        if(params){
+        	options.url += (options.url.indexOf('?')>-1?'&':'?')+params;
+        }
+        $script.src = options.url;
         //超时处理
        	hander = setTimeout(function(){
             $head.removeChild($script);
-            window[options.jsonpCallback] = null;
+            if(window[options.jsonpCallback]){
+            	window[options.jsonpCallback] = null;
+            }
             options.error();
             options.complete();
         }, options.timeout);
 	}else{
 		if(options.cache){
-			options.data += options.data?'&_'+random:'_'+random;
+			params += params?'&_'+random:'_'+random;
         }
 		//创建xhr对象
 		var xhr = new (self.XMLHttpRequest||ActiveXObject)("Microsoft.XMLHTTP");
@@ -87,11 +99,11 @@ function ajax(params){
 			xhr.open(options.type, options.url, options.async);
 			xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
 		}else{
-			if(options.data){
-                options.url += options.url.indexOf('?')>-1?'&'+options.data:'?'+options.data;
-            }
+			if(params){
+            	options.url += (options.url.indexOf('?')>-1?'&':'?')+params;
+	        }
 			xhr.open(options.type, options.url, options.async);
-			options.data = null;
+			params = null;
 		}
 		for(var name in options.headers){
 			xhr.setRequestHeader(name,options.headers[name]);
@@ -101,7 +113,7 @@ function ajax(params){
 				xhr[field]= options.xhrFields[field];
 			}
 		}
-		xhr.send(options.data);
+		xhr.send(params);
 		//超时处理
 		var requestDone = false;
 		hander = setTimeout(function() {
