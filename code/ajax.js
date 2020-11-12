@@ -103,7 +103,7 @@ function ajax(params){
             	options.url += (options.url.indexOf('?')>-1?'&':'?')+params;
 	        }
 			xhr.open(options.type, options.url, options.async);
-			params = null;
+			params = '';
 		}
 		for(var name in options.headers){
 			xhr.setRequestHeader(name,options.headers[name]);
