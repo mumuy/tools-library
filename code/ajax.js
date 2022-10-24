@@ -21,10 +21,16 @@ function ajax(params){
 		success: function(){},					//请求成功后调用
 		complete: function(){}					//请求完成后调用
 	};
-	var formatParams = function(json) {
+	var formatParams = function(data) {
         var arr = [];
-        for(var i in json) {
-            arr.push(encodeURIComponent(i) + '=' + encodeURIComponent(json[i]));
+        if(data instanceof FormData){
+        	data.forEach(function(value,key){
+        		arr.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
+        	});
+        }else{    	
+	        for(var i in data) {
+	            arr.push(encodeURIComponent(i) + '=' + encodeURIComponent(data[i]));
+	        }
         }
         return arr.join("&");
     };
