@@ -21,18 +21,12 @@ function ajax(params){
 		success: function(){},					//请求成功后调用
 		complete: function(){}					//请求完成后调用
 	};
-	var formatParams = function(data) {
-        var arr = [];
-        if(data instanceof FormData){
-        	data.forEach(function(value,key){
-        		arr.push(encodeURIComponent(key) + '=' + encodeURIComponent(value));
-        	});
-        }else{    	
-	        for(var i in data) {
-	            arr.push(encodeURIComponent(i) + '=' + encodeURIComponent(data[i]));
-	        }
+	var formatData = function(data) {
+        var arr = [];  	
+        for(var i in data) {
+            arr.push(encodeURIComponent(i) + '=' + encodeURIComponent(data[i]));
         }
-        return arr.join("&");
+    	return arr.join("&");
     };
     for(var i in params){
     	switch(i){
@@ -46,9 +40,13 @@ function ajax(params){
     			options[i] = params[i];
     	}
     }
-    var params = '';
+    var data = '';
     if(typeof options.data =='object'){
-        params = formatParams(options.data);
+    	if(data instanceof FormData){
+        	options.type = 'POST';
+        }else{
+        	data = formatData(options.data);
+        }
     }
 	if(options.dataType=='jsonp'||options.dataType=='script'){
 		options.cache = params.cache||false;
@@ -72,14 +70,16 @@ function ajax(params){
 			};
 		}
         //发送请求
-        if(options.cache){
-	    	params += (params?'&':'')+('_'+random);
-	    }
-        if(options.dataType=='jsonp'){
-        	params += (params?'&':'')+(options.jsonp+'='+options.jsonpCallback);
-        }
-        if(params){
-        	options.url += (options.url.indexOf('?')>-1?'&':'?')+params;
+        if(typeof data=='string'){
+	        if(options.cache){
+		    	data += (data?'&':'')+('_'+random);
+		    }
+	        if(options.dataType=='jsonp'){
+	        	data += (data?'&':'')+(options.jsonp+'='+options.jsonpCallback);
+	        }
+        	if(data){
+        		options.url += (options.url.indexOf('?')>-1?'&':'?')+data;
+        	}
         }
         $script.src = options.url;
         //超时处理
@@ -100,16 +100,21 @@ function ajax(params){
 		//发送请求
 		if (options.type == 'POST') {
 			xhr.open(options.type, options.url, options.async);
-			xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
+			if(data instanceof FormData){
+				xhr.setRequestHeader('content-type','multipart/form-data');
+			}else{
+				xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
+			}
 		}else{
-			if(options.cache){
-		    	params += (params?'&':'')+('_'+random);
-		    }
-			if(params){
-            	options.url += (options.url.indexOf('?')>-1?'&':'?')+params;
+			if(typeof data=='string'){
+				if(options.cache){
+			    	data += (data?'&':'')+('_'+random);
+			    }
+			    if(data){
+	        		options.url += (options.url.indexOf('?')>-1?'&':'?')+data;
+	        	}
 	        }
 			xhr.open(options.type, options.url, options.async);
-			params = '';
 		}
 		for(var name in options.headers){
 			xhr.setRequestHeader(name,options.headers[name]);
@@ -119,7 +124,7 @@ function ajax(params){
 				xhr[field]= options.xhrFields[field];
 			}
 		}
-		xhr.send(params);
+		xhr.send(data);
 		//超时处理
 		var requestDone = false;
 		hander = setTimeout(function() {
