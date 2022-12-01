@@ -40,17 +40,14 @@ function ajax(params){
     			options[i] = params[i];
     	}
     }
-    var data = '';
     if(typeof options.data =='object'){
-    	if(data instanceof FormData){
+    	if(options.data instanceof FormData){
         	options.type = 'POST';
-        }else{
-        	data = formatData(options.data);
         }
     }
 	if(options.dataType=='jsonp'||options.dataType=='script'){
 		options.cache = params.cache||false;
-		//插入动态脚本及回调函数
+		// 插入动态脚本及回调函数
 		var $head = document.getElementsByTagName('head')[0];
 		var $script = document.createElement('script');
 		$head.appendChild($script);
@@ -69,20 +66,19 @@ function ajax(params){
 	            options.complete();
 			};
 		}
-        //发送请求
-        if(typeof data=='string'){
-	        if(options.cache){
-		    	data += (data?'&':'')+('_'+random);
-		    }
-	        if(options.dataType=='jsonp'){
-	        	data += (data?'&':'')+(options.jsonp+'='+options.jsonpCallback);
-	        }
-        	if(data){
-        		options.url += (options.url.indexOf('?')>-1?'&':'?')+data;
-        	}
+        // 发送请求
+        var data = formatData(options.data);
+        if(options.cache){
+	    	data += (data?'&':'')+('_'+random);
+	    }
+        if(options.dataType=='jsonp'){
+        	data += (data?'&':'')+(options.jsonp+'='+options.jsonpCallback);
         }
+    	if(data){
+    		options.url += (options.url.indexOf('?')>-1?'&':'?')+data;
+    	}
         $script.src = options.url;
-        //超时处理
+        // 超时处理
        	hander = setTimeout(function(){
             $head.removeChild($script);
             if(window[options.jsonpCallback]){
@@ -92,28 +88,29 @@ function ajax(params){
             options.complete();
         }, options.timeout);
 	}else{
-		//创建xhr对象
+		// 创建xhr对象
 		var xhr = new (self.XMLHttpRequest||ActiveXObject)("Microsoft.XMLHTTP");
 		if(!xhr){
 			return false;
 		}
-		//发送请求
+		// 发送请求
 		if (options.type == 'POST') {
 			xhr.open(options.type, options.url, options.async);
 			if(data instanceof FormData){
 				xhr.setRequestHeader('content-type','multipart/form-data');
-			}else{
+			}else if(typeof options.data=='string'){
 				xhr.setRequestHeader('content-type','application/x-www-form-urlencoded');
+			}else{
+				xhr.setRequestHeader('content-type','application/json');
 			}
 		}else{
-			if(typeof data=='string'){
-				if(options.cache){
-			    	data += (data?'&':'')+('_'+random);
-			    }
-			    if(data){
-	        		options.url += (options.url.indexOf('?')>-1?'&':'?')+data;
-	        	}
-	        }
+			var data = formatData(options.data);
+			if(options.cache){
+		    	data += (data?'&':'')+('_'+random);
+		    }
+		    if(data){
+        		options.url += (options.url.indexOf('?')>-1?'&':'?')+data;
+        	}
 			xhr.open(options.type, options.url, options.async);
 		}
 		for(var name in options.headers){
@@ -124,8 +121,8 @@ function ajax(params){
 				xhr[field]= options.xhrFields[field];
 			}
 		}
-		xhr.send(data);
-		//超时处理
+		xhr.send(options.type == 'POST'?data:null);
+		// 超时处理
 		var requestDone = false;
 		hander = setTimeout(function() {
 			requestDone = true;
@@ -135,7 +132,7 @@ function ajax(params){
 			}
 			options.complete();
 		}, options.timeout);
-		//状态处理
+		// 状态处理
 		xhr.onreadystatechange = function(){
 			if(xhr.readyState == 4&&!requestDone) {
 				if(xhr.status>=200 && xhr.status<300||xhr.status == 304) {
