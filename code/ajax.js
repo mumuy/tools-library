@@ -121,7 +121,7 @@ function ajax(params){
                 xhr[field]= options.xhrFields[field];
             }
         }
-        xhr.send(options.type == 'POST'?data:null);
+        xhr.send(options.type == 'POST'?JSON.stringify(options.data):null);
         // 超时处理
         var requestDone = false;
         hander = setTimeout(function() {
