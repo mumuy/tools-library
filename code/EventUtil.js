@@ -1,6 +1,6 @@
 //跨浏览器事件对象
 var EventUtil = { 
-	addEvent:function(element,type,handler){ //添加绑定
+	addEvent:function(element,type,handler){ // 添加绑定
 		if(element.addEventListener){ 
 			element.addEventListener(type,handler,false); 
 		}else if(element.attachEvent){ 
@@ -9,7 +9,7 @@ var EventUtil = {
 			element['on'+type]=handler; 
 		} 
 	}, 
-	removeEvent:function(element,type,handler){ //删除绑定 
+	removeEvent:function(element,type,handler){ // 删除绑定 
 		if(element.removeEventListener){ 
 			element.removeEventListneter(type,handler,false); 
 		}else if(element.detachEvent){ 
@@ -22,11 +22,14 @@ var EventUtil = {
 	    if (document.createEventObject) {		// IE浏览器支持fireEvent方法
 	        var evt = document.createEventObject();	
 	        return element.fireEvent('on' + type, evt)
-	    }else{									// 其他标准浏览器使用dispatchEvent方法
+	    }else if(document.createEvent){			// 其他标准浏览器使用dispatchEvent方法
 	        var evt = document.createEvent('HTMLEvents');
-	        evt.initEvent(type, true, true);	// initEvent接受3个参数：事件类型，是否冒泡，是否阻止浏览器的默认行为
+	        evt.initEvent(type, true, false);
 	        return !element.dispatchEvent(evt);
-	    }
+	    }else{                                  // 最新标准
+            var evt = new Event(type, { bubbles: true, cancelable: false });
+            element.dispatchEvent(evt);
+        }
 	},
 	getEvent:function(event){ //返回事件对象引用 
 		return event?event:window.event; 
