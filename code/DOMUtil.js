@@ -86,6 +86,15 @@ var DOMUtil = {
         }
         return results;
     },
+    getSelectedText:function() {
+        if (window.getSelection) {
+            return window.getSelection().toString();    
+        }else if (document.getSelection) { 
+            return document.getSelection(); 
+        }else if (document.selection) { 
+            return document.selection.createRange().text;
+        } 
+    },
     hasClass:function(node,classname){
         return node.className.match(new RegExp('(\\s|^)'+classname+'(\\s|$)'));
     },
